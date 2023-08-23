@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('foto')->nullable();
             $table->decimal('salario', 10,2)->nullable();
             $table->foreignId('departamento_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
-            $table->foreignId('cargos_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
-            $table->foreignId('users_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('cargo_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('user_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
             $table->timestamps();
         });
     }

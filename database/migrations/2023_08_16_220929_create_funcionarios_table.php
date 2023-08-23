@@ -21,7 +21,7 @@ return new class extends Migration
             $table->char('cpf', 11)->unique();
             $table->string('foto')->nullable();
             $table->decimal('salario', 10,2)->nullable();
-            $table->foreignId('departamento_id')->constrained()->onDelete('cascade')->onUpdate('restrict');
+            $table->foreignId('departamento_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
             $table->foreignId('cargos_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
             $table->foreignId('users_id')->constrained()->onDelete('restrict')->onUpdate('restrict');
             $table->timestamps();

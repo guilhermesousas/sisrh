@@ -78,7 +78,17 @@ class FuncionarioController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
+         $funcionario = Funcionario::find($id);
+
+        if(!$funcionario){
+            return back();
+        }
+
+        $departamentos = Departamento::all()->sortBy('nome');
+        $cargos = Cargo::all()->sortBy('descricao');
+
+        return view('funcionarios.edit', compact('funcionario', 'departamentos', 'cargos'));
     }
 
     /**

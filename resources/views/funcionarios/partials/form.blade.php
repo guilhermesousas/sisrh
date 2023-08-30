@@ -1,35 +1,35 @@
 <div class="col-md-6">
     <label for="nome" class="form-label">Nome</label>
-    <input type="text" class="form-control" id="nome" name="nome" required>
+    <input type="text" class="form-control" id="nome" name="nome" value="{{$funcionario->nome ?? ""}}"required>
   </div>
   <div class="col-md-6">
     <label for="data_nasc" class="form-label">Data de Nascimento</label>
-    <input type="date" class="form-control" id="data_nasc" name="data_nasc" required>
+    <input type="date" class="form-control" id="data_nasc" name="data_nasc" value= ""required>
   </div>
   <div class="col-md-4">
     <label for="sexo" class="form-label">Sexo</label>
     <select id="sexo" name="sexo" class="form-select" required>
   <option value=""></option>
-  <option value="m">Masculino</option>
+  <option value="m" @if (@isset($funcionario->sexo))@selected($funcionario->sexo == 'm') @endif>Masculino</option>
   <option value="f">Feminino</option>
   <option value="o">Outros</option>
 </select>
   </div>
   <div class="col-md-4">
     <label for="cpf" class="form-label">CPF</label>
-    <input type="text" class="form-control" id="cpf" name="cpf" minlenght="11" maxlenght="12" required>
+    <input type="text" class="form-control" id="cpf" name="cpf" minlenght="11" maxlenght="12" value="{{$funcionario->cpf ??""}}" required>
   </div>
   <div class="col-md-4">
     <label for="email" class="form-label">E-mail</label>
-    <input type="email" class="form-control" id="email" name="email" required>
+    <input type="email" class="form-control" id="email" name="email" value="{{$funcionario->email ?? ""}}" required>
   </div>
   <div class="col-md-4">
     <label for="telefone" class="form-label">Telefone</label>
-    <input type="text" class="form-control" id="telefone" name="telefone" required>
+    <input type="text" class="form-control" id="telefone" name="telefone" value="{{$funcionario->telefone ?? ""}}" required>
   </div>
   <div class="col-md-4">
     <label for="departamento_id" class="form-label">Departamentos</label>
-    <select id="departamento_id" name="departamento_id" class="form-select" required>
+    <select id="departamento_id" name="departamento_id" class="form-select" value="{{$funcionario->departamento ?? ""}}" required>
         <option value="">--</option>
         @foreach ($departamentos as $departamento)
         <option value="{{$departamento->id}}">{{$departamento->nome}}</option>

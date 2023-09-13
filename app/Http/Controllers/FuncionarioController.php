@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cargo;
 use App\Models\Departamento;
 use App\Models\Funcionario;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Image;
+use Intervention\Image\Facades\Image;
 
 class FuncionarioController extends Controller
 {
@@ -17,8 +16,7 @@ class FuncionarioController extends Controller
      */
     public function index()
     {
-       $funcionarios = Funcionario::all()->sortBy('nome');
-        //Receber os dados do banco através
+        $funcionarios = Funcionario::all()->sortBy('nome');
         return view('funcionarios.index', compact('funcionarios'));
     }
 
@@ -27,11 +25,9 @@ class FuncionarioController extends Controller
      */
     public function create()
     {
-        // retorna o formulario de cadastro do funcionario
         $departamentos = Departamento::all()->sortBy('nome');
         $cargos = Cargo::all()->sortBy('descricao');
-
-        return view('funcionarios.create', compact('departamentos','cargos'));
+        return view('funcionarios.create', compact('departamentos', 'cargos'));
     }
 
     /**
@@ -42,27 +38,28 @@ class FuncionarioController extends Controller
         $input = $request->toArray();
         //dd($input);
 
-        $input ['user_id'] = 1;
+        $input['user_id'] = 1;
 
         if($request->hasFile('foto')){
             $input['foto'] = $this->uploadFoto($request->foto);
         }
-        //Insert de dados do usuario
+
+        //INSERT IN TABLE
         Funcionario::create($input);
 
-        return redirect()->route('funcionarios.index')->with('sucesso, Funcionário cadastrado com sucesso');
+        return redirect()->route('funcionarios.index')->with('sucesso', 'Funcionário cadastrado com sucesso!');
     }
-    //função para redimensionar e realizar o upload da foto
+
     private function uploadFoto($foto){
         $nomeArquivo = $foto->hashName();
 
-        //redimensionar foto
-        //$imagem = Image::make($foto)->fit(200,200);
+        //Redimensionar - Foto
+        $imagem = Image::make($foto)->fit(200,200);
 
-        //Salvar arquivo da foto
-        //Storage::put('public/funcionarios/'.$nomeArquivo,$imagem->encode());
-        $foto->store('public/funcionarios/');
 
+        //save photo archive
+        Storage::put('public/funcionarios/'.$nomeArquivo, $imagem->encode());
+        //$foto->store('public/funcionarios/');
         return $nomeArquivo;
     }
     /**
@@ -78,8 +75,7 @@ class FuncionarioController extends Controller
      */
     public function edit(string $id)
     {
-
-         $funcionario = Funcionario::find($id);
+        $funcionario = Funcionario::find($id);
 
         if(!$funcionario){
             return back();
@@ -87,8 +83,8 @@ class FuncionarioController extends Controller
 
         $departamentos = Departamento::all()->sortBy('nome');
         $cargos = Cargo::all()->sortBy('descricao');
-
         return view('funcionarios.edit', compact('funcionario', 'departamentos', 'cargos'));
+
     }
 
     /**
@@ -107,7 +103,7 @@ class FuncionarioController extends Controller
 
         $funcionario->fill($input);
         $funcionario->save();
-        return redirect()->route('funcionarios.index')->with('sucesso, funcionario alterado com sucesso');
+        return redirect()->route('funcionarios.index')->with('sucesso', 'Funcionario alterado com sucesso!');
     }
 
     /**
@@ -115,6 +111,13 @@ class FuncionarioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $funcionario = Funcionario::find($id);
+
+        if($funcionario['foto'] != null){
+            Storage::delete('public/funcionarios/'.$funcionario['foto']);
+        }
+
+        $funcionario->delete();
+        return redirect()->route('funcionarios.index')->with('sucesso', 'Funcionario deletado com sucesso!');
     }
 }
